@@ -14,7 +14,7 @@ COPY . .
 
 # Build the application
 RUN cmake -B build -DCMAKE_BUILD_TYPE=Release && \
-    cmake --build build --config Release
+    cmake --build build --config Release -j8
 
 # Stage 2: Runtime
 FROM ubuntu:24.04
