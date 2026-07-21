@@ -1,0 +1,137 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>basic_socket::set_option (1 of 2 overloads)</title>
+<link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets Vsnapshot">
+<link rel="home" href="../../../../index.html" title="Asio">
+<link rel="up" href="../set_option.html" title="basic_socket::set_option">
+<link rel="prev" href="../set_option.html" title="basic_socket::set_option">
+<link rel="next" href="overload2.html" title="basic_socket::set_option (2 of 2 overloads)">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%"><tr><td valign="top"><img alt="asio C++ library" width="250" height="60" src="../../../../asio.png"></td></tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../set_option.html"><img src="../../../../prev.png" alt="Prev"></a><a accesskey="u" href="../set_option.html"><img src="../../../../up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../home.png" alt="Home"></a><a accesskey="n" href="overload2.html"><img src="../../../../next.png" alt="Next"></a>
+</div>
+<div class="section">
+<div class="titlepage"><div><div><h5 class="title">
+<a name="asio.reference.basic_socket.set_option.overload1"></a><a class="link" href="overload1.html" title="basic_socket::set_option (1 of 2 overloads)">basic_socket::set_option
+          (1 of 2 overloads)</a>
+</h5></div></div></div>
+<p>
+            Set an option on the socket.
+          </p>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="keyword">typename</span> <a class="link" href="../../SettableSocketOption.html" title="Settable socket option requirements">SettableSocketOption</a><span class="special">&gt;</span>
+<span class="keyword">void</span> <span class="identifier">set_option</span><span class="special">(</span>
+    <span class="keyword">const</span> <span class="identifier">SettableSocketOption</span> <span class="special">&amp;</span> <span class="identifier">option</span><span class="special">);</span>
+</pre>
+<p>
+            This function is used to set an option on the socket.
+          </p>
+<h6>
+<a name="asio.reference.basic_socket.set_option.overload1.h0"></a>
+            <span class="phrase"><a name="asio.reference.basic_socket.set_option.overload1.parameters"></a></span><a class="link" href="overload1.html#asio.reference.basic_socket.set_option.overload1.parameters">Parameters</a>
+          </h6>
+<div class="variablelist">
+<p class="title"><b></b></p>
+<dl class="variablelist">
+<dt><span class="term">option</span></dt>
+<dd><p>
+                  The new option value to be set on the socket.
+                </p></dd>
+</dl>
+</div>
+<h6>
+<a name="asio.reference.basic_socket.set_option.overload1.h1"></a>
+            <span class="phrase"><a name="asio.reference.basic_socket.set_option.overload1.exceptions"></a></span><a class="link" href="overload1.html#asio.reference.basic_socket.set_option.overload1.exceptions">Exceptions</a>
+          </h6>
+<div class="variablelist">
+<p class="title"><b></b></p>
+<dl class="variablelist">
+<dt><span class="term">asio::system_error</span></dt>
+<dd><p>
+                  Thrown on failure.
+                </p></dd>
+</dl>
+</div>
+<h6>
+<a name="asio.reference.basic_socket.set_option.overload1.h2"></a>
+            <span class="phrase"><a name="asio.reference.basic_socket.set_option.overload1.see_also"></a></span><a class="link" href="overload1.html#asio.reference.basic_socket.set_option.overload1.see_also">See
+            Also</a>
+          </h6>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+                <a class="link" href="../../socket_base/broadcast.html" title="socket_base::broadcast"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">broadcast</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/do_not_route.html" title="socket_base::do_not_route"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">do_not_route</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/keep_alive.html" title="socket_base::keep_alive"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">keep_alive</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/linger.html" title="socket_base::linger"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">linger</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/receive_buffer_size.html" title="socket_base::receive_buffer_size"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">receive_buffer_size</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/receive_low_watermark.html" title="socket_base::receive_low_watermark"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">receive_low_watermark</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/reuse_address.html" title="socket_base::reuse_address"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">reuse_address</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/send_buffer_size.html" title="socket_base::send_buffer_size"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">send_buffer_size</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../socket_base/send_low_watermark.html" title="socket_base::send_low_watermark"><code class="computeroutput"><span class="identifier">socket_base</span><span class="special">::</span><span class="identifier">send_low_watermark</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__multicast__join_group.html" title="ip::multicast::join_group"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">multicast</span><span class="special">::</span><span class="identifier">join_group</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__multicast__leave_group.html" title="ip::multicast::leave_group"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">multicast</span><span class="special">::</span><span class="identifier">leave_group</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__multicast__enable_loopback.html" title="ip::multicast::enable_loopback"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">multicast</span><span class="special">::</span><span class="identifier">enable_loopback</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__multicast__outbound_interface.html" title="ip::multicast::outbound_interface"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">multicast</span><span class="special">::</span><span class="identifier">outbound_interface</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__multicast__hops.html" title="ip::multicast::hops"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">multicast</span><span class="special">::</span><span class="identifier">hops</span></code></a>
+              </li>
+<li class="listitem">
+                <a class="link" href="../../ip__tcp/no_delay.html" title="ip::tcp::no_delay"><code class="computeroutput"><span class="identifier">ip</span><span class="special">::</span><span class="identifier">tcp</span><span class="special">::</span><span class="identifier">no_delay</span></code></a>
+              </li>
+</ul></div>
+<h6>
+<a name="asio.reference.basic_socket.set_option.overload1.h3"></a>
+            <span class="phrase"><a name="asio.reference.basic_socket.set_option.overload1.example"></a></span><a class="link" href="overload1.html#asio.reference.basic_socket.set_option.overload1.example">Example</a>
+          </h6>
+<p>
+            Setting the IPPROTO_TCP/TCP_NODELAY option:
+          </p>
+<pre class="programlisting"><span class="identifier">asio</span><span class="special">::</span><span class="identifier">ip</span><span class="special">::</span><span class="identifier">tcp</span><span class="special">::</span><span class="identifier">socket</span> <span class="identifier">socket</span><span class="special">(</span><span class="identifier">my_context</span><span class="special">);</span>
+<span class="special">...</span>
+<span class="identifier">asio</span><span class="special">::</span><span class="identifier">ip</span><span class="special">::</span><span class="identifier">tcp</span><span class="special">::</span><span class="identifier">no_delay</span> <span class="identifier">option</span><span class="special">(</span><span class="keyword">true</span><span class="special">);</span>
+<span class="identifier">socket</span><span class="special">.</span><span class="identifier">set_option</span><span class="special">(</span><span class="identifier">option</span><span class="special">);</span>
+</pre>
+</div>
+<div class="copyright-footer">Copyright © 2003-2026 Christopher
+      M. Kohlhoff<p>
+        Distributed under the Boost Software License, Version 1.0. (See accompanying
+        file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
+      </p>
+</div>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../set_option.html"><img src="../../../../prev.png" alt="Prev"></a><a accesskey="u" href="../set_option.html"><img src="../../../../up.png" alt="Up"></a><a accesskey="h" href="../../../../index.html"><img src="../../../../home.png" alt="Home"></a><a accesskey="n" href="overload2.html"><img src="../../../../next.png" alt="Next"></a>
+</div>
+</body>
+</html>

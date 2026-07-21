@@ -1,7 +1,7 @@
 #include "crow.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
 extern "C" {
     #include "libcaptcha.h"
+    #include "stb_image_write.h"
 }
 #include <unordered_map>
 #include <random>
@@ -14,9 +14,11 @@ extern "C" {
 struct Session {
     std::string status;       // "pending", "verified"
     std::string captcha_code; // current captcha string for this session
+    std::string token;        // session token
 };
 
-std::unordered_map<std::string, Session> session_store;
+std::unordered_map<std::string, Session> session_store; // user_id -> Session
+std::unordered_map<std::string, std::string> token_to_user; // token -> user_id
 std::mutex store_mutex;
 
 // Simple random string generator for secure tokens / captcha codes
@@ -95,12 +97,21 @@ int main() {
         
         {
             std::lock_guard<std::mutex> lock(store_mutex);
-            session_store[token] = Session{
+            // Clean up old session for this user if exists
+            if (session_store.count(user_id)) {
+                std::string old_token = session_store[user_id].token;
+                token_to_user.erase(old_token);
+            }
+            session_store[user_id] = Session{
                 .status = "pending",
-                .captcha_code = ""
+                .captcha_code = "",
+                .token = token
             };
+            token_to_user[token] = user_id;
         }
 
+        // Return the secure, unique link back to the bot
+        // Note: adjust host/port to point to public domain or local address as needed
         crow::json::wvalue response;
         response["url"] = "http://localhost:8080/captcha/" + token;
         response["token"] = token;
@@ -111,7 +122,7 @@ int main() {
     CROW_ROUTE(app, "/captcha/<string>").methods(crow::HTTPMethod::GET)([](std::string token){
         {
             std::lock_guard<std::mutex> lock(store_mutex);
-            if (!session_store.count(token)) {
+            if (!token_to_user.count(token)) {
                 return crow::response(404, "Invalid or expired session.");
             }
         }
@@ -345,12 +356,14 @@ int main() {
         std::string code;
         {
             std::lock_guard<std::mutex> lock(store_mutex);
-            if (!session_store.count(token)) {
+            if (!token_to_user.count(token)) {
                 return crow::response(404, "Session not found");
             }
+            std::string user_id = token_to_user[token];
+            
             // Generate a new captcha code for this request
             code = generate_random_string(6, true);
-            session_store[token].captcha_code = code;
+            session_store[user_id].captcha_code = code;
         }
 
         // Generate the PNG image data
@@ -386,8 +399,9 @@ int main() {
         bool verified = false;
         {
             std::lock_guard<std::mutex> lock(store_mutex);
-            if (session_store.count(token)) {
-                std::string stored_code = session_store[token].captcha_code;
+            if (token_to_user.count(token)) {
+                std::string user_id = token_to_user[token];
+                std::string stored_code = session_store[user_id].captcha_code;
                 
                 std::string input_lower = captcha_input;
                 std::string stored_lower = stored_code;
@@ -395,13 +409,13 @@ int main() {
                 std::transform(stored_lower.begin(), stored_lower.end(), stored_lower.begin(), ::tolower);
 
                 if (!stored_code.empty() && input_lower == stored_lower) {
-                    session_store[token].status = "verified";
+                    session_store[user_id].status = "verified";
                     // Delete code after successful verification ("delete after finish")
-                    session_store[token].captcha_code = "";
+                    session_store[user_id].captcha_code = "";
                     verified = true;
                 } else {
                     // Clear code on failure to force a new captcha on refresh/retry
-                    session_store[token].captcha_code = "";
+                    session_store[user_id].captcha_code = "";
                 }
             }
         }
@@ -414,10 +428,10 @@ int main() {
     });
 
     // STEP 6: Bot polls this endpoint to check if user passed
-    CROW_ROUTE(app, "/check-status/<string>").methods(crow::HTTPMethod::GET)([](std::string token){
+    CROW_ROUTE(app, "/check-status/<string>").methods(crow::HTTPMethod::GET)([](std::string user_id){
         std::lock_guard<std::mutex> lock(store_mutex);
-        if (session_store.count(token)) {
-            return crow::response(200, session_store[token].status);
+        if (session_store.count(user_id)) {
+            return crow::response(200, session_store[user_id].status);
         }
         return crow::response(404, "Not Found");
     });

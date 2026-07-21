@@ -1,0 +1,6 @@
+[submodule "extern/Crow"]
+	path = extern/Crow
+	url = https://github.com/CrowCpp/Crow
+[submodule "extern/libcaptcha"]
+	path = extern/libcaptcha
+	url = https://codeberg.org/g0tsu/libcaptcha
