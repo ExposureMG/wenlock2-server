@@ -89,6 +89,8 @@ std::string create_captcha_png(const std::string& text, const std::string& font_
 }
 
 int main() {
+    std::setvbuf(stdout, NULL, _IONBF, 0);
+    std::setvbuf(stderr, NULL, _IONBF, 0);
     crow::SimpleApp app;
 
     // STEP 2 & 3: Bot requests a secure link
