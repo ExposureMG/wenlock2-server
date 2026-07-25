@@ -8,33 +8,34 @@
     order authorize before respond
 }
 
+# 1. Top-Level Security App Configuration (caddy-security)
+security {
+    oauth2 provider discord {
+        client_id "{$DISCORD_CLIENT_ID}"
+        client_secret "{$DISCORD_CLIENT_SECRET}"
+        scopes identify email
+    }
+
+    auth portal myportal {
+        crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
+        enable identity provider discord
+        cookie domain wenlock.zapto.org
+    }
+
+    auth policy verify_policy {
+        set auth url /auth
+        crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
+        validate bearer header
+        validate token cookie
+    }
+}
+
+# 2. Site Block Configuration
 wenlock.zapto.org {
-    # 1. ALTCHA PoW Captcha Challenge Endpoint
+    # ALTCHA PoW Captcha Challenge Endpoint
     handle /altcha/challenge {
         altcha_challenge {
             hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
-        }
-    }
-
-    # 2. Security Portal (caddy-security) with Discord OAuth2 Provider
-    security {
-        oauth2 provider discord {
-            client_id "{$DISCORD_CLIENT_ID}"
-            client_secret "{$DISCORD_CLIENT_SECRET}"
-            scopes identify email
-        }
-
-        auth portal myportal {
-            crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
-            enable identity provider discord
-            cookie domain wenlock.zapto.org
-        }
-
-        auth policy verify_policy {
-            set auth url /auth
-            crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
-            validate bearer header
-            validate token cookie
         }
     }
 
@@ -43,12 +44,12 @@ wenlock.zapto.org {
         security portal myportal
     }
 
-    # 3. Discord Bot Auth Query Endpoint
+    # Discord Bot Auth Query Endpoint
     handle /auth/check/* {
         reverse_proxy {$SERVER_IP:192.168.1.100}:8081
     }
 
-    # 4. /verify Route: ALTCHA -> OAuth -> serves verified.html
+    # /verify Route: ALTCHA -> OAuth -> serves verified.html
     handle /verify/* {
         altcha_verify {
             hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
@@ -60,7 +61,7 @@ wenlock.zapto.org {
         file_server
     }
 
-    # 5. /dashboard Route: ALTCHA -> OAuth -> serves dashboard.html
+    # /dashboard Route: ALTCHA -> OAuth -> serves dashboard.html
     handle /dashboard/* {
         altcha_verify {
             hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
@@ -72,7 +73,7 @@ wenlock.zapto.org {
         file_server
     }
 
-    # 6. /appeal Route: OAuth -> serves appeal.html
+    # /appeal Route: OAuth -> serves appeal.html
     handle /appeal* {
         authorize with verify_policy
 
@@ -81,12 +82,12 @@ wenlock.zapto.org {
         file_server
     }
 
-    # 7. DPP C++ Dashboard API (Port 8081)
+    # DPP C++ Dashboard API (Port 8081)
     handle /api/* {
         reverse_proxy {$SERVER_IP:192.168.1.100}:8081
     }
 
-    # 7. Secondary Bot & WebSocket Gateway Proxy (Port 8442 mapped from HTTPS 443)
+    # Secondary Bot & WebSocket Gateway Proxy (Port 8442 mapped from HTTPS 443)
     handle /bot/* {
         uri strip_prefix /bot
         reverse_proxy https://{$SERVER_IP:192.168.1.100}:8442 {
@@ -104,7 +105,7 @@ wenlock.zapto.org {
         }
     }
 
-    # 8. Unknown / Fallback: Serves 404.html
+    # Unknown / Fallback: Serves 404.html
     handle {
         root * /var/www/html
         try_files {path} /404.html
