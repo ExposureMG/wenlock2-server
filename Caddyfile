@@ -10,19 +10,21 @@
 
 # 1. Top-Level Security App Configuration (caddy-security)
 security {
-    oauth2 provider discord {
+    oauth identity provider discord {
+        realm discord
+        driver discord
         client_id "{$DISCORD_CLIENT_ID}"
         client_secret "{$DISCORD_CLIENT_SECRET}"
         scopes identify email
     }
 
-    auth portal myportal {
+    authentication portal myportal {
         crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
         enable identity provider discord
         cookie domain wenlock.zapto.org
     }
 
-    auth policy verify_policy {
+    authorization policy verify_policy {
         set auth url /auth
         crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
         validate bearer header
@@ -41,7 +43,7 @@ wenlock.zapto.org {
 
     # Auth Portal Routes (caddy-security)
     handle /auth* {
-        security portal myportal
+        authenticate with myportal
     }
 
     # Discord Bot Auth Query Endpoint
