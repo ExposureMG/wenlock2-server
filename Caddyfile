@@ -32,8 +32,17 @@
     }
 }
 
-# Site Block Configuration
-wenlock.zapto.org {
+# 1. HTTP (Port 80) -> HTTPS Redirect
+http://wenlock.zapto.org {
+    redir https://{host}{uri} permanent
+}
+
+# 2. HTTPS (Port 443) Site Block & TLS Policy
+https://wenlock.zapto.org {
+    tls {
+        protocols tls1.2 tls1.3
+    }
+
     # ALTCHA PoW Captcha Challenge Endpoint
     handle /altcha/challenge {
         altcha_challenge {
