@@ -6,33 +6,33 @@
     order altcha_verify before respond
     order authenticate before respond
     order authorize before respond
+
+    # Top-Level Security App Configuration (caddy-security)
+    security {
+        oauth identity provider discord {
+            realm discord
+            driver discord
+            client_id "{$DISCORD_CLIENT_ID}"
+            client_secret "{$DISCORD_CLIENT_SECRET}"
+            scopes identify email
+        }
+
+        authentication portal myportal {
+            crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
+            enable identity provider discord
+            cookie domain wenlock.zapto.org
+        }
+
+        authorization policy verify_policy {
+            set auth url /auth
+            crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
+            set token sources cookie header
+            allow roles authp/user authp/admin
+        }
+    }
 }
 
-# 1. Top-Level Security App Configuration (caddy-security)
-security {
-    oauth identity provider discord {
-        realm discord
-        driver discord
-        client_id "{$DISCORD_CLIENT_ID}"
-        client_secret "{$DISCORD_CLIENT_SECRET}"
-        scopes identify email
-    }
-
-    authentication portal myportal {
-        crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
-        enable identity provider discord
-        cookie domain wenlock.zapto.org
-    }
-
-    authorization policy verify_policy {
-        set auth url /auth
-        crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
-        validate bearer header
-        validate token cookie
-    }
-}
-
-# 2. Site Block Configuration
+# Site Block Configuration
 wenlock.zapto.org {
     # ALTCHA PoW Captcha Challenge Endpoint
     handle /altcha/challenge {
