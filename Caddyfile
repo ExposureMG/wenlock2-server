@@ -3,16 +3,17 @@
 # reverse proxies to DPP C++ backend (ports 8081 & 8442), and handles 404 fallbacks.
 
 {
-    order altcha before respond
+    order altcha_verify before respond
     order authenticate before respond
     order authorize before respond
 }
 
 wenlock.zapto.org {
-    # 1. ALTCHA PoW Captcha Challenge Module
-    altcha {
-        hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
-        challenge_path /altcha/challenge
+    # 1. ALTCHA PoW Captcha Challenge Endpoint
+    handle /altcha/challenge {
+        altcha_challenge {
+            hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
+        }
     }
 
     # 2. Security Portal (caddy-security) with Discord OAuth2 Provider
@@ -49,7 +50,9 @@ wenlock.zapto.org {
 
     # 4. /verify Route: ALTCHA -> OAuth -> serves verified.html
     handle /verify/* {
-        altcha_verify
+        altcha_verify {
+            hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
+        }
         authorize with verify_policy
 
         root * /var/www/html
@@ -59,7 +62,9 @@ wenlock.zapto.org {
 
     # 5. /dashboard Route: ALTCHA -> OAuth -> serves dashboard.html
     handle /dashboard/* {
-        altcha_verify
+        altcha_verify {
+            hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
+        }
         authorize with verify_policy
 
         root * /var/www/html

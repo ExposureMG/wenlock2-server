@@ -12,6 +12,7 @@ services:
       - SERVER_IP=${SERVER_IP:-46.174.227.201}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./html:/var/www/html:ro
       - caddy_data:/data
       - caddy_config:/config
     networks:
