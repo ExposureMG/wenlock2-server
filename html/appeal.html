@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wenlock2 Security - Ban Appeal Portal</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS & DaisyUI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b0f19;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(225, 29, 72, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.12) 0px, transparent 50%);
+        }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-500/20">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-none tracking-wide text-white">Wenlock Security</h1>
+                    <span class="text-xs text-rose-400 font-medium">Ban Appeal Submission Portal</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div id="authBadge" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs">
+                    Authenticating...
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-2xl mx-auto px-4 py-10 flex-1 w-full">
+
+        <!-- Notification / Status Banner -->
+        <div id="alertBanner" class="hidden mb-6 alert alert-error shadow-lg text-sm border-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span id="alertBannerText">Failed to load appeal details.</span>
+        </div>
+
+        <div id="successBanner" class="hidden mb-6 alert alert-success shadow-lg text-sm border-none text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Your ban appeal has been submitted successfully to the server moderators!</span>
+        </div>
+
+        <!-- Appeal Form Card -->
+        <div class="glass-card rounded-2xl p-8 shadow-2xl">
+            <div class="mb-6 border-b border-slate-800 pb-4">
+                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Submit Case Appeal
+                </h2>
+                <p class="text-xs text-slate-400 mt-1">
+                    Please provide an honest statement explaining your appeal. Note that <strong class="text-rose-400">only 1 appeal is accepted per ban case</strong>.
+                </p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label text-xs font-semibold text-slate-400">Target Server (Guild ID)</label>
+                        <input id="guildIdInput" type="text" readonly class="input input-bordered w-full bg-slate-900/90 border-slate-800 text-slate-300 text-sm font-mono cursor-not-allowed" />
+                    </div>
+                    <div>
+                        <label class="label text-xs font-semibold text-slate-400">Ban Case ID</label>
+                        <input id="caseIdInput" type="text" readonly class="input input-bordered w-full bg-slate-900/90 border-slate-800 text-rose-400 text-sm font-mono font-bold cursor-not-allowed" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="label text-xs font-semibold text-slate-300">Appeal Statement</label>
+                    <textarea id="statementInput" rows="6" placeholder="Explain the context of your ban, why you believe it should be reviewed, and your commitment to following server guidelines..." class="textarea textarea-bordered w-full bg-slate-900 border-slate-700 text-sm focus:border-rose-500 focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-4 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Verified via Discord OAuth2</span>
+                    <button id="submitBtn" class="btn btn-error bg-rose-600 hover:bg-rose-500 border-none text-white px-8 shadow-lg shadow-rose-600/20">
+                        Submit Appeal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-6 text-center text-xs text-slate-500 mt-12">
+        <p>Wenlock Security &bull; Ban Appeal System</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast toast-end toast-bottom z-50"></div>
+
+    <script>
+        function getToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('token')) {
+                const tok = urlParams.get('token');
+                localStorage.setItem('wenlock_token', tok);
+                return tok;
+            }
+            return localStorage.getItem('wenlock_token') || '';
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} text-xs font-semibold shadow-lg py-2 px-4 transition-all duration-300`;
+            alert.innerHTML = `<span>${message}</span>`;
+            container.appendChild(alert);
+            setTimeout(() => {
+                alert.classList.add('opacity-0');
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        function showAlertBanner(msg) {
+            const b = document.getElementById('alertBanner');
+            document.getElementById('alertBannerText').textContent = msg;
+            b.classList.remove('hidden');
+        }
+
+        async function verifyOAuthUser() {
+            const token = getToken();
+            const badge = document.getElementById('authBadge');
+
+            if (!token) {
+                badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold";
+                badge.innerHTML = `Unauthenticated &bull; Redirecting...`;
+                setTimeout(() => {
+                    window.location.href = `/auth?redirect=${encodeURIComponent(window.location.href)}`;
+                }, 1200);
+                return null;
+            }
+
+            try {
+                const res = await fetch('/api/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold";
+                    badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> User: ${data.user_id}`;
+                    return data.user_id;
+                } else {
+                    badge.className = "flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-semibold";
+                    badge.innerHTML = `Session Expired &bull; Redirecting...`;
+                    setTimeout(() => {
+                        window.location.href = `/auth?redirect=${encodeURIComponent(window.location.href)}`;
+                    }, 1200);
+                    return null;
+                }
+            } catch (err) {
+                badge.textContent = "OAuth Connection Error";
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const guildId = urlParams.get('guild_id') || '';
+            const caseId = urlParams.get('case_id') || '';
+            const targetId = urlParams.get('target_id') || '';
+
+            document.getElementById('guildIdInput').value = guildId || 'Not specified';
+            document.getElementById('caseIdInput').value = caseId ? `#${caseId}` : 'Not specified';
+
+            const authenticatedUserId = await verifyOAuthUser();
+
+            if (authenticatedUserId && targetId && authenticatedUserId !== targetId) {
+                showAlertBanner(`Warning: Logged in Discord Account (${authenticatedUserId}) does not match the target of this ban case (${targetId}).`);
+            }
+
+            document.getElementById('submitBtn').addEventListener('click', async () => {
+                if (!guildId || !caseId) {
+                    showToast('Missing required Guild ID or Case ID in URL parameters.', 'warning');
+                    return;
+                }
+
+                const statement = document.getElementById('statementInput').value.trim();
+                if (!statement) {
+                    showToast('Please write an appeal statement before submitting.', 'warning');
+                    return;
+                }
+
+                const token = getToken();
+                try {
+                    const res = await fetch(`/api/guilds/${guildId}/appeal`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ case_id: parseInt(caseId), statement })
+                    });
+
+                    const data = await res.json().catch(() => ({}));
+                    if (res.ok && data.success) {
+                        document.getElementById('successBanner').classList.remove('hidden');
+                        document.getElementById('statementInput').disabled = true;
+                        document.getElementById('submitBtn').disabled = true;
+                        showToast('Appeal submitted successfully!', 'success');
+                    } else {
+                        showAlertBanner(data.error || 'Failed to submit appeal.');
+                        showToast(data.error || 'Submission failed', 'error');
+                    }
+                } catch (err) {
+                    showToast('Network error submitting appeal', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wenlock2 - Server Gateway</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- Global Custom Styles -->
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body class="min-h-screen bg-base-300 flex flex-col items-center justify-between p-4 md:p-8">
+    <header class="w-full max-w-4xl flex items-center justify-between py-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+            </div>
+            <span class="font-bold text-xl tracking-tight text-base-content">Wenlock2 Gateway</span>
+        </div>
+        <div class="badge badge-success badge-sm gap-1 px-3 py-2">
+            <span class="w-2 h-2 rounded-full bg-success animate-ping"></span>
+            Operational
+        </div>
+    </header>
+
+    <main class="w-full max-w-4xl flex-1 flex flex-col items-center justify-center my-8">
+        <div class="card w-full bg-base-100 shadow-2xl border border-base-200 overflow-hidden">
+            <div class="card-body p-8 md:p-12 text-center items-center">
+                <div class="badge badge-primary badge-outline mb-2">SECURE GATEWAY</div>
+                <h1 class="text-3xl md:text-5xl font-extrabold text-base-content tracking-tight">
+                    Wenlock2 Discord Bot Platform
+                </h1>
+                <p class="text-base-content/70 max-w-xl text-base md:text-lg mt-4 leading-relaxed">
+                    Protecting automated operations with ALTCHA Proof-of-Work verification, Discord OAuth2 authentication, and high-performance DPP C++ backend services.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl mt-8">
+                    <!-- Verification Portal Card -->
+                    <div class="p-6 rounded-2xl bg-base-200/50 border border-base-300 flex flex-col justify-between text-left hover:border-primary/50 transition-colors">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-info/10 flex items-center justify-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-lg font-bold text-base-content">User Verification</h2>
+                            <p class="text-xs text-base-content/60 mt-1">Complete PoW captcha challenges and link your Discord account for bot access.</p>
+                        </div>
+                        <a href="/verify" class="btn btn-info btn-sm mt-6 w-full">Start Verification</a>
+                    </div>
+
+                    <!-- Dashboard Card -->
+                    <div class="p-6 rounded-2xl bg-base-200/50 border border-base-300 flex flex-col justify-between text-left hover:border-primary/50 transition-colors">
+                        <div>
+                            <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
+                            </div>
+                            <h2 class="text-lg font-bold text-base-content">Management Dashboard</h2>
+                            <p class="text-xs text-base-content/60 mt-1">Access bot administration, verification queries, and system configuration.</p>
+                        </div>
+                        <a href="/dashboard" class="btn btn-primary btn-sm mt-6 w-full">Open Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full max-w-4xl text-center py-4 border-t border-base-200 text-xs text-base-content/50">
+        &copy; 2026 Wenlock2 Server Gateway &bull; Powered by Caddy &amp; DPP C++
+    </footer>
+</body>
+</html>

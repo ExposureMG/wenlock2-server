@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Required - ALTCHA</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- Global Custom Styles -->
+    <link rel="stylesheet" href="src/style.css">
+    <!-- ALTCHA Web Component -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/altcha/dist/altcha.min.js"></script>
+</head>
+<body class="min-h-screen bg-base-300 flex items-center justify-center p-4">
+    <div class="card w-full max-w-md bg-base-100 shadow-2xl border border-base-200">
+        <div class="card-body items-center text-center p-8">
+            <!-- Security Badge Icon -->
+            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+            
+            <h1 class="card-title text-2xl font-bold text-base-content">Verification Required</h1>
+            <p class="text-base-content/70 text-sm mt-1">Please complete the challenge below to continue. This helps us protect against automated abuse.</p>
+            
+            <!-- ALTCHA Container -->
+            <div class="my-6 w-full flex justify-center">
+                <altcha-widget
+                    challengeurl="/api/altcha/challenge"
+                    hidefooter="false"
+                    auto="onload"
+                ></altcha-widget>
+            </div>
+            
+            <!-- Alert / Status Message -->
+            <div id="message" class="alert hidden w-full text-sm"></div>
+            
+            <div class="divider my-2"></div>
+            
+            <footer class="text-xs text-base-content/50">
+                Protected by <a href="https://altcha.org" target="_blank" class="link link-primary no-underline hover:underline">ALTCHA</a>
+            </footer>
+        </div>
+    </div>
+    
+    <script>
+        const widget = document.querySelector('altcha-widget');
+        const message = document.getElementById('message');
+        
+        // Get session ID from URL if present (for POST data restoration)
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session');
+        const returnPath = urlParams.get('return') || '/';
+        
+        /**
+         * Build a safe redirect URL that properly handles existing query parameters.
+         * Works with any CMS: WordPress, Drupal, Magento, Laravel, etc.
+         * 
+         * @param {string} returnTo - The return URL (may already have query params)
+         * @param {string} payload - The ALTCHA solution payload
+         * @param {string|null} session - Optional session ID
+         * @returns {string} - Safe redirect URL with altcha params appended correctly
+         */
+        function buildRedirectURL(returnTo, payload, session) {
+            try {
+                const url = new URL(returnTo, window.location.origin);
+                
+                if (url.origin !== window.location.origin) {
+                    console.error('Security: Cross-origin redirect blocked:', returnTo);
+                    return '/?altcha=' + encodeURIComponent(payload);
+                }
+                
+                url.searchParams.set('altcha', payload);
+                if (session) {
+                    url.searchParams.set('session', session);
+                }
+                
+                return url.pathname + url.search + url.hash;
+                
+            } catch (e) {
+                console.error('Invalid return URL, using fallback:', returnTo, e);
+                return '/?altcha=' + encodeURIComponent(payload);
+            }
+        }
+        
+        widget.addEventListener('statechange', (ev) => {
+            if (ev.detail.state === 'verified') {
+                message.textContent = 'Verification successful! Redirecting...';
+                message.className = 'alert alert-success w-full text-sm block';
+                
+                const payload = ev.detail.payload;
+                const redirectURL = buildRedirectURL(returnPath, payload, sessionId);
+                
+                setTimeout(() => {
+                    window.location.href = redirectURL;
+                }, 1000);
+            } else if (ev.detail.state === 'error') {
+                message.textContent = 'Verification failed. Please try again.';
+                message.className = 'alert alert-error w-full text-sm block';
+            }
+        });
+        
+        if (sessionId) {
+            message.textContent = 'Your request has been saved. Complete the challenge to continue.';
+            message.className = 'alert alert-info w-full text-sm block';
+        }
+    </script>
+</body>
+</html>

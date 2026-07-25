@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.23/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <!-- Global Custom Styles -->
+    <link rel="stylesheet" href="src/style.css">
+</head>
+<body class="min-h-screen bg-base-300 flex items-center justify-center p-4">
+    <div class="card w-full max-w-md bg-base-100 shadow-2xl border border-base-200">
+        <div class="card-body items-center text-center p-8">
+            <!-- Warning / 404 Icon -->
+            <div class="w-20 h-20 rounded-full bg-error/15 flex items-center justify-center mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 text-error" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+            </div>
+            
+            <span class="badge badge-error badge-outline mb-1 font-mono">ERROR 404</span>
+            <h1 class="card-title text-2xl font-bold text-base-content">Page Not Found</h1>
+            <p class="text-base-content/70 text-sm mt-2 leading-relaxed">
+                The requested URL was not found on this server or requires proper authentication.
+            </p>
+            
+            <div class="card-actions mt-6 w-full flex flex-col gap-2">
+                <a href="/index.html" class="btn btn-primary w-full">Return Home</a>
+            </div>
+            
+            <div class="divider my-2"></div>
+            
+            <footer class="text-xs text-base-content/50">
+                Wenlock2 Server Gateway
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,1 +1,0 @@
-docker build -t exposuremg9936/wenlock2-server .

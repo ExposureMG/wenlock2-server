@@ -1,0 +1,28 @@
+services:
+  caddy:
+    image: exposuremg9936/caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    environment:
+      - SERVER_IP=${SERVER_IP:-46.174.227.201}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - wenlock
+
+networks:
+  wenlock:
+    external: true
+
+volumes:
+  caddy_data:
+  caddy_config:
+  rqlite-data-node-1:
+

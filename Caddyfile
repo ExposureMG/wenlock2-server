@@ -1,0 +1,114 @@
+# Caddyfile configuration for server deployment
+# Implements ALTCHA PoW captcha -> Discord OAuth2 auth policy flow for /verify and /dashboard,
+# reverse proxies to DPP C++ backend (ports 8081 & 8442), and handles 404 fallbacks.
+
+{
+    order altcha before respond
+    order authenticate before respond
+    order authorize before respond
+}
+
+wenlock.zapto.org {
+    # 1. ALTCHA PoW Captcha Challenge Module
+    altcha {
+        hmac_key "{$ALTCHA_HMAC_KEY:change-me-secret-key}"
+        challenge_path /altcha/challenge
+    }
+
+    # 2. Security Portal (caddy-security) with Discord OAuth2 Provider
+    security {
+        oauth2 provider discord {
+            client_id "{$DISCORD_CLIENT_ID}"
+            client_secret "{$DISCORD_CLIENT_SECRET}"
+            scopes identify email
+        }
+
+        auth portal myportal {
+            crypto key sign-verify "{$JWT_SECRET:change-me-jwt-secret}"
+            enable identity provider discord
+            cookie domain wenlock.zapto.org
+        }
+
+        auth policy verify_policy {
+            set auth url /auth
+            crypto key verify "{$JWT_SECRET:change-me-jwt-secret}"
+            validate bearer header
+            validate token cookie
+        }
+    }
+
+    # Auth Portal Routes (caddy-security)
+    handle /auth* {
+        security portal myportal
+    }
+
+    # 3. Discord Bot Auth Query Endpoint
+    handle /auth/check/* {
+        reverse_proxy {$SERVER_IP:192.168.1.100}:8081
+    }
+
+    # 4. /verify Route: ALTCHA -> OAuth -> serves verified.html
+    handle /verify/* {
+        altcha_verify
+        authorize with verify_policy
+
+        root * /var/www/html
+        rewrite * /verified.html
+        file_server
+    }
+
+    # 5. /dashboard Route: ALTCHA -> OAuth -> serves dashboard.html
+    handle /dashboard/* {
+        altcha_verify
+        authorize with verify_policy
+
+        root * /var/www/html
+        rewrite * /dashboard.html
+        file_server
+    }
+
+    # 6. /appeal Route: OAuth -> serves appeal.html
+    handle /appeal* {
+        authorize with verify_policy
+
+        root * /var/www/html
+        rewrite * /appeal.html
+        file_server
+    }
+
+    # 7. DPP C++ Dashboard API (Port 8081)
+    handle /api/* {
+        reverse_proxy {$SERVER_IP:192.168.1.100}:8081
+    }
+
+    # 7. Secondary Bot & WebSocket Gateway Proxy (Port 8442 mapped from HTTPS 443)
+    handle /bot/* {
+        uri strip_prefix /bot
+        reverse_proxy https://{$SERVER_IP:192.168.1.100}:8442 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    handle /ws/* {
+        reverse_proxy https://{$SERVER_IP:192.168.1.100}:8442 {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    # 8. Unknown / Fallback: Serves 404.html
+    handle {
+        root * /var/www/html
+        try_files {path} /404.html
+        file_server
+    }
+
+    handle_errors {
+        root * /var/www/html
+        rewrite * /404.html
+        file_server
+    }
+}
